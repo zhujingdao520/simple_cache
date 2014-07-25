@@ -9,7 +9,8 @@ insert(Key, Val) ->
             sc_server:replace(Pid, Val);
         {error, _} ->
             {ok, Pid} = sc_server:create(Val),
-            sc_store:insert(Key, Pid)
+            sc_store:insert(Key, Pid),
+            sc_event:insert(Key, Val)
     end.
 
 lookup(Key) ->
@@ -23,7 +24,8 @@ lookup(Key) ->
 delete(Key) ->
     case sc_store:lookup(Key) of
         {ok, Pid} ->
-            sc_server:delete(Pid);
+            sc_server:delete(Pid),
+            sc_event:delete(Key);
         {error, _} ->
             {error, not_fount}
     end.

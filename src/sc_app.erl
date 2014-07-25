@@ -11,9 +11,9 @@
 -spec start(integer(), integer()) -> {ok, pid()} | {error, atom()}.
 start(_Type, _ArgeType) ->
     sc_store:init(), %% 初始化 ets
-    sc_sup:start_link(),
     case sc_sup:start_link() of
         {ok, Pid} ->
+            sc_event_logger:add_handler(),
             {ok, Pid};
         _Other ->
             {error, error}
